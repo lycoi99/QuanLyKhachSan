@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace QuanLyKhachSan
+{
+    public partial class frmQuanlykhachsan : Form
+    {
+        SqlConnection con = new SqlConnection();
+        public frmQuanlykhachsan()
+        {
+            InitializeComponent();
+        }
+
+        private void frmQuanlykhachsan_Load(object sender, EventArgs e)
+        {
+
+            string connectionString = "Data Source=laptop-af99q19j;Initial Catalog=QuanLyKhachSan;Integrated Security=True";
+            con.ConnectionString = connectionString;
+            con.Open();
+            string sql = "Select * From Phong";
+            SqlDataAdapter adp = new SqlDataAdapter(sql, con);
+            DataTable tablePhong = new DataTable();
+            adp.Fill(tablePhong);
+            DataGridView_Phong.DataSource = tablePhong;
+               
+                
+        }
+
+        private void DataGridView_Phong_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            txtMaPhong.Text = DataGridView_Phong.CurrentRow.Cells["MaPhong"].Value.ToString();
+            txtTenPhong.Text = DataGridView_Phong.CurrentRow.Cells["TenPhong"].Value.ToString();
+            txtDonGia.Text = DataGridView_Phong.CurrentRow.Cells["DonGia"].Value.ToString();
+            txtMaPhong.Enabled = false;
+        }
+
+        private void btnThem_Click(object sender, EventArgs e)
+        {
+            ResetValues();
+            
+        }
+        private void ResetValues()
+        {
+            txtMaPhong.Text = "";
+            txtDonGia.Text = "";
+            txtTenPhong.Text = "";
+        }
+
+        private void btnHuy_Click(object sender, EventArgs e)
+        {
+            ResetValues();
+        }
+
+        private void btnLuu_Click(object sender, EventArgs e)
+        {
+            string sql;
+            sql = "INSERT INTO Phong(MaPhong,TenPhong,DonGia) VALUES(N'" +
+                txtMaPhong.Text + "',N'" + txtTenPhong.Text + "',N'" + Convert.ToString(txtDonGia.Text) + "')";
+           
+        }
